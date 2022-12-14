@@ -1,0 +1,10 @@
+20221213	23:39:29	aa905a4a-6d7f-4c7e-933b-5897f9e37984	GET	/locations	undefined
+20221213	23:39:43	4c3fc465-e9da-481a-8adf-7ed63b617505	GET	/locations	undefined
+20221213	23:40:21	c59eb3c8-2ee3-413c-a9cc-75c68f2c4337	OPTIONS	/locations	https://www.google.com.ua
+20221213	23:40:21	ef1d09f1-0b6b-4486-8fe1-70506b9ee94f	GET	/locations	https://www.google.com.ua
+20221213	23:59:41	06a67f1a-194e-4b9e-ac82-0f33b710d13b	GET	/locations	http://localhost:3000
+20221213	23:59:41	3d0a523b-1667-467f-9cd5-cd1540e61fb8	GET	/locations	http://localhost:3000
+20221214	00:00:25	33d5c762-0667-40fd-b573-e53899ab1613	GET	/locations	http://localhost:3000
+20221214	00:00:37	87f0d035-3b59-4ff6-9b8c-bfdd37ef9950	GET	/locations	http://localhost:3000
+20221214	00:00:50	ff12493d-cb24-4463-a6a2-66be2c6ae10c	GET	/locations	http://localhost:3000
+20221214	00:01:09	b0ccb675-c8c1-4366-a131-e88621804c7d	GET	/locations	http://localhost:3000
