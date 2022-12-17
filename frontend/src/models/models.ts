@@ -9,7 +9,7 @@ export type ItemCard = {
   isLiked: boolean;
 };
 
-export interface Location {
-  id: number;
+export interface Link {
   name: string;
+  path: string;
 }

@@ -9,7 +9,6 @@ import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { locations } from "../data/dummy";
 import Button from "@mui/material/Button";
-import { nanoid } from "nanoid";
 
 const NewAd = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -73,11 +72,6 @@ const NewAd = () => {
               variant="filled"
               fullWidth
               InputProps={{ className: "max-w-[32rem] w-full" }}
-              sx={{
-                "& input": {
-                  bgcolor: "#f6ebf4",
-                },
-              }}
             />
             <div className="mt-4">
               <div className="max-w-[42rem]">
@@ -98,19 +92,7 @@ const NewAd = () => {
                       label="Категорії"
                       placeholder="Обрати категорію"
                       sx={{
-                        " & .MuiInputBase-adornedEnd": {
-                          bgcolor: "#f6ebf4",
-                        },
-                        "& .MuiInputBase-root": {
-                          bgcolor: "#f6ebf4",
-                          flexWrap: "wrap",
-                        },
-                        "& .MuiChip-root": {
-                          mt: ".5rem",
-                          mb: ".5rem",
-                        },
                         maxWidth: "48rem",
-                        bgcolor: "#f6ebf4",
                       }}
                     />
                   )}
@@ -174,17 +156,9 @@ const NewAd = () => {
               onChange={(e) => {
                 setDesc(e.target.value);
               }}
-              InputProps={{ className: "max-w-[32rem] w-full" }}
               sx={{
                 maxWidth: "32rem",
                 width: "100%",
-                bgcolor: "#f6ebf4",
-                "& .MuiInputBase-root": {
-                  bgcolor: "#f6ebf4",
-                },
-                "& .Mui-focused": {
-                  bgcolor: "#f6ebf4",
-                },
               }}
             />
             <div className="flex justify-between mt-2">
@@ -198,27 +172,20 @@ const NewAd = () => {
               autoComplete={false}
               noOptionsText="Область не знайдено"
               disablePortal
-              options={locations.map((item) => item.name)}
-              sx={{ width: "32rem" }}
+              options={locations}
               value={location}
               onChange={(e, newValue) => {
                 setLocation(newValue as string);
+              }}
+              sx={{
+                maxWidth: "32rem",
+                width: "100%",
               }}
               renderInput={(params) => (
                 <TextField
                   variant="filled"
                   type={"text"}
                   {...params}
-                  InputProps={{
-                    ...params.InputProps,
-                    className: params.InputProps.className + "",
-                  }}
-                  sx={{
-                    bgcolor: "#f6ebf4",
-                    "& .MuiInputBase-root": {
-                      bgcolor: "#f6ebf4",
-                    },
-                  }}
                   label="Область"
                   placeholder="Вкажіть область вашого нас. пункту"
                 />
@@ -233,14 +200,8 @@ const NewAd = () => {
                 label="Ім'я"
                 type="text"
                 sx={{
-                  width: "32rem",
-                  bgcolor: "#f6ebf4",
-                  "& .MuiInputBase-root": {
-                    bgcolor: "#f6ebf4",
-                  },
-                  "& .Mui-focused": {
-                    bgcolor: "#f6ebf4",
-                  },
+                  maxWidth: "32rem",
+                  width: "100%",
                 }}
               />
             </div>
@@ -250,14 +211,8 @@ const NewAd = () => {
                 label="Email-адреса"
                 type={"email"}
                 sx={{
-                  width: "32rem",
-                  bgcolor: "#f6ebf4",
-                  "& .MuiInputBase-root": {
-                    bgcolor: "#f6ebf4",
-                  },
-                  "& .Mui-focused": {
-                    bgcolor: "#f6ebf4",
-                  },
+                  maxWidth: "32rem",
+                  width: "100%",
                 }}
               />
             </div>
@@ -267,14 +222,8 @@ const NewAd = () => {
                 label="Номер телефону"
                 type={"tel"}
                 sx={{
-                  width: "32rem",
-                  bgcolor: "#f6ebf4",
-                  "& .MuiInputBase-root": {
-                    bgcolor: "#f6ebf4",
-                  },
-                  "& .Mui-focused": {
-                    bgcolor: "#f6ebf4",
-                  },
+                  maxWidth: "32rem",
+                  width: "100%",
                 }}
               />
             </div>
