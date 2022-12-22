@@ -5,3 +5,4 @@
 20221217	16:15:43	d355a71d-3097-42c6-a5b5-536c6dc71b1e	undefined: ETIMEOUT	querySrv	_mongodb._tcp.olx.kano4co.mongodb.net
 20221217	16:50:59	7e432688-1bda-4511-b227-7324a98bf5a3	undefined: undefined	undefined	undefined
 20221217	16:56:31	ca415872-5991-4223-bfd0-bcee52cbb7cd	undefined: undefined	undefined	undefined
+20221221	10:36:03	b33c6f57-03fb-438e-91e9-422880786ad6	undefined: ECONNREFUSED	querySrv	_mongodb._tcp.olx.kano4co.mongodb.net

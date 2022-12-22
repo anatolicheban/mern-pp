@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const { add, deleteAd, update, getMyAds, getSingleAd, getLatestAds, getFavAds, toggleLikeAd } = require('../controllers/adsController')
 const verifyJWT = require('../middleware/verifyJWT')
+const reqLimiter = require('../middleware/reqLimiter')
 
+router.use(reqLimiter)
 
 router.route('/')
   .post(verifyJWT, add)

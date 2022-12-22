@@ -2,7 +2,7 @@ import { ItemCard, Link } from "../models/models";
 
 export const Ads: ItemCard[] = [
   {
-    id: 1,
+    id: "1",
     image: "/assets/img/car.jpg",
     title: "Авто",
     location: "Житомирська",
@@ -12,7 +12,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: 2,
+    id: "2",
     image: "/assets/img/generator.jpg",
     title: "Електрогенератор",
     location: "Київська",
@@ -22,7 +22,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: 3,
+    id: "3",
     image: "/assets/img/gloves.jpg",
     title: "Перчатки",
     location: "Дніпропетровська",
@@ -32,7 +32,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: 4,
+    id: "4",
     image: "/assets/img/house.jpg",
     title: "Хата",
     location: "Київська",
@@ -42,7 +42,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: 5,
+    id: "5",
     image: "/assets/img/sviter.jpg",
     title: "Светр",
     location: "Одеська",
@@ -52,7 +52,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: 6,
+    id: "6",
     image: "/assets/img/toy.webp",
     title: "М'яка іграшка",
     location: "Миколаївcька",
@@ -62,8 +62,18 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: 7,
+    id: "7",
     image: "/assets/img/valiza.webp",
+    title: "Валіза",
+    location: "Одеська",
+    date: "2022-11-10T20:36:13.554Z",
+    price: 2500,
+    currency: "UAH",
+    isLiked: false,
+  },
+  {
+    id: "8",
+    image: null,
     title: "Валіза",
     location: "Одеська",
     date: "2022-11-10T20:36:13.554Z",

@@ -9,6 +9,7 @@ const connectDB = require('./config/dbConn')
 const authRoutes = require('./routes/authRoutes')
 const adsRoutes = require('./routes/adsRoutes')
 const upload = require('multer')()
+const userRoutes = require('./routes/userRoutes')
 const PORT = process.env.PORT || 3500
 
 const app = express()
@@ -16,7 +17,7 @@ const app = express()
 connectDB()
 
 //middleware
-app.use(logger)
+// app.use(logger)
 app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -26,6 +27,7 @@ app.use(upload.array())
 //Routes
 app.use('/auth', authRoutes)
 app.use('/ads', adsRoutes)
+app.use('/user', userRoutes)
 
 //DB connection
 mongoose.connection.once('open', () => {

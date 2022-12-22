@@ -1,9 +1,13 @@
 import React from "react";
-import Container from "../components/UI/Container";
-import { Link, NavLink } from "react-router-dom";
 import Button from "@mui/material/Button";
+import { useGetMyProfileQuery } from "../features/user/userApiSlice";
+import { Navigate } from "react-router";
 
 const Profile = () => {
+  const { data: profile, isLoading, isError } = useGetMyProfileQuery();
+
+  if (isError) return <Navigate to="/" state />;
+
   return (
     <>
       <div className="bg-light p-4 mt-4 flex gap-4">
@@ -15,27 +19,25 @@ const Profile = () => {
           />
         </div>
         <div className="flex flex-col gap-1 justify-center">
-          <p className="text-xl font-semibold text-blue">Чебан Анатолій</p>
-          <p className="text-sm text-gray-600">Зареєстрований 12.01.2021</p>
+          <div className="flex gap-2 items-center">
+            <p className="text-xl font-semibold text-blue">@{profile?.username}</p>
+            <p className="font-light text-base mt-[.2rem] text-gray-700">id: {profile?._id}</p>
+          </div>
+          <p className="text-sm text-gray-600">Зареєстрований {profile?.registrationDate}</p>
           <p>
-            Email: <span className="font-semibold text-blue">tolik.cheban.2019@gmail.com</span>
-          </p>
-          <p>
-            Телефон: <span className="font-semibold text-blue">+380967232653</span>
+            Email: <span className="font-semibold text-blue">{profile?.email}</span>
           </p>
           <p className="text-md">
-            Активних оголошень: <span className="font-semibold text-blue">12</span>{" "}
-            {"(Усього: 134)"}
+            Оголошень: <span className="font-semibold text-blue">{profile?.adsAmount}</span>
           </p>
         </div>
       </div>
-      <div className="flex justify-end mt-4 bg-light p-4">
-        <div>
+      <div className="flex justify-end my-4 bg-light p-4">
+        <div className="flex gap-4 flex-wrap">
           <Button variant="contained">Змінити аватар</Button>
-          <Button sx={{ mx: ".5rem" }} variant="contained">
-            Змінити номер тел.
-          </Button>
+          <Button variant="contained">Змінити номер тел.</Button>
           <Button variant="contained">Змінити пароль</Button>
+          <Button variant="contained">Змінити ім'я користувача</Button>
         </div>
       </div>
     </>

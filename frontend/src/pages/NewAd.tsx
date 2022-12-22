@@ -9,6 +9,7 @@ import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { locations } from "../data/dummy";
 import Button from "@mui/material/Button";
+import { useAuth } from "../hooks/useAuth";
 
 const NewAd = () => {
   const [categories, setCategories] = useState<string[]>([]);

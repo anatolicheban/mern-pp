@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { ItemCard } from "../models/models";
-import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
-import Tooltip from "@mui/material/Tooltip";
+import { Tooltip, IconButton } from "@mui/material";
 
 type AdCardProps = ItemCard;
 
@@ -29,7 +28,13 @@ const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: 
   return (
     <li className="bg-light p-4 hover:shadow-md transition">
       <Link to={`/ads/${id}`}>
-        <img src={image} alt={title} className={"object-cover h-48 w-56 max-w-full"} />
+        {image ? (
+          <img src={image} alt={title} className={"object-cover h-48 w-56 max-w-full"} />
+        ) : (
+          <div className="h-48 w-56 bg-slate-200 flex items-center justify-center">
+            <p className="font-bold text-2xl text-slate-400">Немає фото</p>
+          </div>
+        )}
         <p className="mt-2 font-semibold">{title}</p>
         <span className="flex justify-between text-xs gap-1 mt-3">
           <p>{location + " обл."}</p>

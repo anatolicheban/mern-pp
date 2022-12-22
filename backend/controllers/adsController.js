@@ -2,13 +2,16 @@ const Advertisment = require('../models/Advertisment')
 const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 const locations = require('../data/locations')
+const { default: mongoose } = require('mongoose')
 
 //@desc Add
 //@route POST /ads
 //@access Private
 const add = asyncHandler(async (req, res) => {
 
-  const { title, location, description, currency, price } = req.body
+  const { title, location, description, currency, price, images } = req.body
+
+  console.log(images);
 
   const date = new Date().toISOString()
   const owner = req.userId
@@ -54,6 +57,7 @@ const add = asyncHandler(async (req, res) => {
     return res.status(403).json({ message: 'Ваш аккаунт має бути верифікований' })
   }
 
+
   const result = await Advertisment.create({
     title,
     location,
@@ -81,6 +85,11 @@ const deleteAd = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Відсутній ідентифікатор" })
   }
 
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ message: "Некорректний ідентифікатор" })
+  }
+
+
   const foundAd = await Advertisment.findById(id).exec()
 
   if (!foundAd) {
@@ -106,6 +115,11 @@ const update = asyncHandler(async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: 'Відсутній ідентифікатор' })
   }
+
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ message: "Некорректний ідентифікатор" })
+  }
+
 
   if (title?.length < 8) {
     return res.status(400).json({ message: 'Назва оголошення надто коротка' })
@@ -164,12 +178,12 @@ const getMyAds = asyncHandler(async (req, res) => {
   const { page } = req.query || 0
   const userId = req.userId
 
-  const adsPerPage = 10
+  const adsPerPage = 5
 
   const adsCount = await Advertisment.find({ owner: userId }).count()
 
   const foundAds = await Advertisment.find({ owner: userId })
-    .select('-owner -__v').sort({ $natural: -1 }).skip(page * adsPerPage).limit(adsPerPage).lean().exec()
+    .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
   res.status(200).header({ Quantity: adsCount }).json(foundAds)
 })
@@ -185,11 +199,17 @@ const getSingleAd = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Відсутній ідентифікатор' })
   }
 
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ message: "Некорректний ідентифікатор" })
+  }
+
+
   const foundAd = await Advertisment.findById(id).lean().exec()
 
   if (!foundAd) {
     return res.status(404).json({ message: 'Оголошення не знайдено' })
   }
+
 
   res.status(200).json(foundAd)
 })
@@ -199,16 +219,27 @@ const getSingleAd = asyncHandler(async (req, res) => {
 //@access Public
 
 const getLatestAds = asyncHandler(async (req, res) => {
-  const { page } = req.query || 0
+  const { page } = req.query || 1
 
-  const adsPerPage = 10
+  const adsPerPage = 5
 
   const adsCount = await Advertisment.find().count()
 
   const foundAds = await Advertisment.find()
-    .select('-owner -__v').sort({ $natural: -1 }).skip(page * adsPerPage).limit(adsPerPage).lean().exec()
+    .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
-  res.status(200).header({ Quantity: adsCount }).json(foundAds)
+  let pages = adsCount / adsPerPage
+
+  if (pages % 1 !== 0) {
+    pages = Math.floor(pages) + 1
+  }
+
+  const response = {
+    ads: foundAds,
+    pages
+  }
+
+  res.status(200).json(response)
 })
 
 //@desc Fav Ads
@@ -218,7 +249,7 @@ const getLatestAds = asyncHandler(async (req, res) => {
 const getFavAds = asyncHandler(async (req, res) => {
   const { page } = req.query || 0
 
-  const adsPerPage = 1
+  const adsPerPage = 5
 
   const user = req.userId
 
@@ -231,7 +262,7 @@ const getFavAds = asyncHandler(async (req, res) => {
   const favsCount = await Advertisment.find({ _id: { $in: foundUser.favourites } }).count()
 
   const favourites = await Advertisment.find({ _id: { $in: foundUser.favourites } })
-    .select('-owner -__v').sort({ $natural: -1 }).skip(page * adsPerPage).limit(adsPerPage).lean().exec()
+    .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
 
 
@@ -247,7 +278,12 @@ const toggleLikeAd = asyncHandler(async (req, res) => {
   const foundUser = await User.findById(req.userId).exec()
 
   if (!foundUser) {
-    return res.sendStatus(403).json({ message: "Forbidden" })
+    return res.status(403).json({ message: "Forbidden" })
+  }
+
+  //ВАЖНО ЗАПОМНИТЬ!!!!
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ message: "Некорректний ідентифікатор" })
   }
 
   let newFavourites = []

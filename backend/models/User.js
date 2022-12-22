@@ -18,6 +18,14 @@ const userSchema = new Schema({
     required: true,
     default: false
   },
+  reqistrationDate: {
+    type: String,
+    required: true
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   favourites: {
     type: Array,
     required: true,

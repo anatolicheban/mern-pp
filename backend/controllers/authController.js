@@ -8,7 +8,9 @@ const asyncHandler = require('express-async-handler')
 //@access Public
 
 const register = asyncHandler(async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, duplPassword, email } = req.body;
+
+  const registrationDate = new Date().toLocaleDateString()
 
   if (!username || !password || !email) {
     return res.status(400).json({ message: 'Заповніть, будь-ласка, усі поля' })
@@ -30,6 +32,10 @@ const register = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Пароль занадто довгий" })
   }
 
+  if (password !== duplPassword) {
+    return res.status(400).json({ message: "Паролі не співпадають" })
+  }
+
   const duplicateUsername = await User.findOne({ username }).lean().exec()
 
   if (duplicateUsername) {
@@ -45,13 +51,14 @@ const register = asyncHandler(async (req, res) => {
   //Encrypting password
   const encryptedPwd = await bcrypt.hash(password, 10)
 
+
   const result = await User.create({
-    username, password: encryptedPwd, email
+    username, password: encryptedPwd, email, registrationDate
   })
 
   console.log(result);
 
-  res.status(201).json({ message: `Користувача ${username} було успішно зареєстровано` })
+  res.status(200).json({ message: `Користувача ${username} було успішно зареєстровано` })
 })
 
 //@desc login
@@ -80,7 +87,8 @@ const login = asyncHandler(async (req, res) => {
     {
       UserInfo: {
         userId: foundUser._id,
-        verified: foundUser.verified
+        verified: foundUser.verified,
+        isAdmin: foundUser.isAdmin
       }
     },
     process.env.ACCESS_TOKEN_SECRET,
@@ -88,7 +96,7 @@ const login = asyncHandler(async (req, res) => {
   )
 
   const refreshToken = jwt.sign(
-    { "username": foundUser.username },
+    { userId: foundUser._id, },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '7d' }
   )
@@ -97,7 +105,7 @@ const login = asyncHandler(async (req, res) => {
   res.cookie('jwt', refreshToken, {
     httpOnly: true, //accessible only by web server 
     // secure: true, //https
-    sameSite: 'None', //cross-site cookie 
+    // sameSite: 'None', //cross-site cookie 
     maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
   })
 
@@ -111,7 +119,7 @@ const login = asyncHandler(async (req, res) => {
 const refresh = asyncHandler(async (req, res) => {
   const cookies = req.cookies
 
-  if (!cookies.jwt) return res.status(401).json({ message: 'Unauthorized' })
+  if (!cookies.jwt) return res.status(401).json({ message: 'Увійдіть в систему' })
 
   const refreshToken = cookies.jwt
 
@@ -121,15 +129,16 @@ const refresh = asyncHandler(async (req, res) => {
     asyncHandler(async (err, decoded) => {
       if (err) return res.status(403).json({ message: 'Forbidden' })
 
-      const foundUser = await User.findOne({ username: decoded.username }).exec()
+      const foundUser = await User.findById(decoded.userId).lean().exec()
 
       if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
 
       const accessToken = jwt.sign(
         {
           UserInfo: {
-            username: foundUser.username,
-            verified: foundUser.verified
+            userId: foundUser._id,
+            verified: foundUser.verified,
+            isAdmin: foundUser.isAdmin
           }
         },
         process.env.ACCESS_TOKEN_SECRET,

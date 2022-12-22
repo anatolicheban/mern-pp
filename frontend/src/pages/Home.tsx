@@ -1,12 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "../components/UI/Container";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, TextField, Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Ads } from "../data/dummy";
 import AdCard from "../components/AdCard";
+import { useGetLatestAdsQuery } from "../features/ads/adsApiSlice";
+import ErrorMessage from "../components/ErrorMessage";
+import { useSearchParams } from "react-router-dom";
+import NoAdsMessage from "../components/NoAdsMessage";
+import Loader from "../components/Loader";
 
 const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const { isError, isLoading, data, refetch } = useGetLatestAdsQuery(page as number, {
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
+
+  useEffect(() => {
+    if (page < 1 || (data && page > data.pages)) {
+      return setSearchParams({
+        page: "1",
+      });
+    }
+  }, [page, setSearchParams, data]);
+
+  const handlePageChange = (e: React.ChangeEvent<unknown>, value: number) => {
+    setSearchParams({
+      page: value.toString(),
+    });
+    refetch();
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) return <ErrorMessage />;
+
+  if (!data?.ads.length) return <NoAdsMessage />;
+
   return (
     <>
       <div className="bg-light py-6">
@@ -30,11 +63,14 @@ const Home = () => {
             Останні публікації
           </h2>
           <ul className="flex flex-wrap gap-4 list-none justify-center mb-8">
-            {Ads.map((item) => (
+            {data?.ads.map((item) => (
               <AdCard key={item.id} {...item} />
             ))}
           </ul>
         </Container>
+      </div>
+      <div className="flex my-4 justify-center">
+        <Pagination count={data?.pages} page={page} onChange={handlePageChange} />
       </div>
     </>
   );
