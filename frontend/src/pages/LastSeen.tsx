@@ -1,6 +1,6 @@
 import React from "react";
-import AdCard from "../components/AdCard";
 import { Ads } from "../data/dummy";
+import { AdCard } from "../components";
 
 const LastSeen = () => {
   return (

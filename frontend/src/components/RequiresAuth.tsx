@@ -1,21 +1,14 @@
-import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-
+import Unauthorized from "./Unauthorized";
 type RequiresAuthProps = { forAdmin?: true } | { forAdmin: never };
 
 const RequiresAuth = ({ forAdmin }: RequiresAuthProps) => {
   const auth = useAuth();
-  console.log(auth);
-
   const location = useLocation();
 
   if (forAdmin) {
-    return auth?.isAdmin ? (
-      <Outlet />
-    ) : (
-      <Navigate to={"/unauthorized"} state={{ from: location }} replace />
-    );
+    return auth?.isAdmin ? <Outlet /> : <Unauthorized />;
   }
 
   return auth?.userId ? (

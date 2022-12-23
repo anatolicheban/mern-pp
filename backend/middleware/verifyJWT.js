@@ -7,7 +7,6 @@ const verifyJWT = (req, res, next) => {
     if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
-
     const token = authHeader.split(' ')[1]
     jwt.verify(
         token,

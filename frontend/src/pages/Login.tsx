@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Container from "../components/UI/Container";
+import { Container } from "../components";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { Alert, Button, TextField, Checkbox } from "@mui/material";
@@ -18,6 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
   const [persist, setPersist] = usePersist();
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,10 +35,18 @@ const Login = () => {
       dispatch(setCredentials({ accessToken }));
       setUsername("");
       setPassword("");
-      navigate("/?page=1");
+      navigate(location.state?.from || "/?page=1");
     } catch (err: any) {
-      if (err.status === 500) return setErrMsg("Помилка серверу, спробуйте пізніше");
-      setErrMsg(err.data.message);
+      //Get err types from backend AND from RTK Query FetchBaseQueryError
+      console.log(err);
+      if (err?.data?.message) {
+        setErrMsg(err.data.message);
+        return errRef.current?.focus();
+      }
+      if (err?.data?.status === 529) {
+        return setErrMsg("Забагато запитівб спробуйте пізніше");
+      }
+      setErrMsg("Помилка серверу, спробуйте пізніше");
       errRef.current?.focus();
     }
   };

@@ -40,8 +40,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
           console.log(err);
         }
       },
+      invalidatesTags: [{ type: "Ads", id: "LIST" }],
     }),
-    sendLogout: builder.mutation({
+    sendLogout: builder.mutation<void, void>({
       query: () => ({
         url: "/auth/logout",
         method: "POST",

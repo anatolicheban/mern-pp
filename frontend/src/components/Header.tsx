@@ -1,10 +1,8 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import IconButton from "@mui/material/IconButton/IconButton";
 import { Link } from "react-router-dom";
 import Container from "./UI/Container";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
+import { Tooltip, Button, IconButton } from "@mui/material";
 
 const Header = () => {
   return (
@@ -17,14 +15,14 @@ const Header = () => {
         </Link>
         <div className="flex items-center gap-4">
           <Link to={"/favourites"}>
-            <IconButton edge="end" color="primary">
+            <IconButton edge="end">
               <Tooltip title="Обране">
                 <FavoriteBorderIcon sx={{ color: "#fff", padding: "0rem" }} />
               </Tooltip>
             </IconButton>
           </Link>
           <Link to={"/my-profile"}>
-            <IconButton edge="end" color="primary">
+            <IconButton edge="end">
               <Tooltip title="Профіль">
                 <PersonOutlineIcon sx={{ color: "#fff" }} />
               </Tooltip>

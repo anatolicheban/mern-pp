@@ -1,12 +1,26 @@
 import React from "react";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 import { useGetMyProfileQuery } from "../features/user/userApiSlice";
 import { Navigate } from "react-router";
+import { Loader, ErrorMessage } from "../components";
 
 const Profile = () => {
-  const { data: profile, isLoading, isError } = useGetMyProfileQuery();
+  const { data: profile, isLoading, isError, error } = useGetMyProfileQuery();
 
-  if (isError) return <Navigate to="/" state />;
+  if (isLoading) return <Loader />;
+
+  if (error) {
+    if (error.status === 401 || error.status === 403) {
+      return (
+        <Navigate to={"/login"} state={{ errMsg: "Увійдіть у систему для доступу" }} replace />
+      );
+    }
+    if (error.status === 529) {
+      return <ErrorMessage errMsg="Забагато запитів з цієї IP адреси" />;
+    }
+  }
+
+  if (isError) return <ErrorMessage />;
 
   return (
     <>

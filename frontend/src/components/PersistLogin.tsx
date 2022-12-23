@@ -13,11 +13,9 @@ const PersistLogin = () => {
   const effectRan = useRef(true);
   const [trueSuccess, setTrueSuccess] = useState(false);
   const location = useLocation();
-
   const [refresh, { isUninitialized, isLoading, isSuccess, isError }] = useRefreshMutation();
 
   useEffect(() => {
-    console.log(persist);
     if (effectRan.current === true || process.env.NODE_ENV !== "development") {
       // React 18 Strict Mode
 
@@ -52,6 +50,9 @@ const PersistLogin = () => {
     //persist: yes, token: no
     console.log("loading");
     return <Loader />;
+  } else if (isError && location.pathname === "/") {
+    //If we are on main page
+    return <Outlet />;
   } else if (isError) {
     //persist: yes, token: no
     return (

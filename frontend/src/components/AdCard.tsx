@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { ItemCard } from "../models/models";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { Tooltip, IconButton } from "@mui/material";
+import { useTogleLikeAdMutation } from "../features/ads/adsApiSlice";
+import { useNavigate } from "react-router-dom";
 
 type AdCardProps = ItemCard;
 
 const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: AdCardProps) => {
   const [like, setLike] = useState(isLiked);
+  const navigate = useNavigate();
+
+  const [likeAd] = useTogleLikeAdMutation();
 
   const formatedDate = date ? new Date(date).toLocaleDateString() : null;
   const formatedPrice = () => {
@@ -20,9 +24,21 @@ const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: 
     return ` ${price + " $"}`;
   };
 
-  const toggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setLike((prev) => !prev);
+    try {
+      setLike((prev) => !prev);
+      await likeAd(id).unwrap();
+      console.log("liked!");
+    } catch (err: any) {
+      setLike((prev) => !prev);
+      if (err?.status === 401 || err?.status === 403) {
+        return navigate("/login", {
+          state: { errorMsg: "Ви маєте бути авторизовані для цієї дії" },
+        });
+      }
+      console.log(err);
+    }
   };
 
   return (
@@ -44,7 +60,7 @@ const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: 
           <p>{formatedPrice()}</p>
           <IconButton color="primary" onClick={toggleLike} sx={{ py: 0 }}>
             <Tooltip title={like ? "Видалити з обранного" : "Додати в обране"}>
-              <div className="h-10">{like ? <FavoriteIcon /> : <FavoriteBorderIcon />}</div>
+              <div className="h-10">{like ? <Favorite /> : <FavoriteBorder />}</div>
             </Tooltip>
           </IconButton>
         </span>

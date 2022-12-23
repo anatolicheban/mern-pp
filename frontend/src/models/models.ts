@@ -6,7 +6,7 @@ export type ItemCard = {
   date: string;
   price: number;
   currency: "USD" | "UAH" | "EUR";
-  isLiked: boolean;
+  isLiked: boolean | undefined;
 };
 
 export interface Link {

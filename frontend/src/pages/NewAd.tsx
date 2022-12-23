@@ -1,15 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import Container from "../components/UI/Container";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import { top100Films } from "../data/dummy";
-import Chip from "@mui/material/Chip";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { Tooltip } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { locations } from "../data/dummy";
-import Button from "@mui/material/Button";
-import { useAuth } from "../hooks/useAuth";
+import { TextField, Button, Tooltip, Chip, Autocomplete } from "@mui/material";
+import { top100Films, locations } from "../data/dummy";
+import { AddAPhoto, Delete } from "@mui/icons-material";
+import { Container } from "../components";
 
 const NewAd = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -116,7 +109,7 @@ const NewAd = () => {
               />
               {images.length === 5 || (
                 <div className="bg-light h-40 w-52 flex items-center justify-center relative">
-                  <AddAPhotoIcon className="absolute !w-16 !h-16 opacity-[0.15]" />
+                  <AddAPhoto className="absolute !w-16 !h-16 opacity-[0.15]" />
                   <button
                     className="text-base font-semibold hover:underline z-20"
                     onClick={onFileBtnClick}
@@ -134,7 +127,7 @@ const NewAd = () => {
                   />
                   <div className="absolute opacity-0 w-full h-full bg-light top-0 hover:opacity-50 flex items-center justify-center hover:first:opacity-50">
                     <Tooltip title="Видалити">
-                      <DeleteIcon
+                      <Delete
                         data-url={item.url}
                         data-name={item.name}
                         className="cursor-pointer !h-8 !w-8"

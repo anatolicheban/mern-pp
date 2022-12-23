@@ -1,30 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Favourites from "./pages/Favourites";
-import LastSeen from "./pages/LastSeen";
-import NewAd from "./pages/NewAd";
-import Profile from "./pages/Profile";
-import MyAds from "./pages/MyAds";
-import SubLayout from "./components/SubLayout";
 import { favsLinks, profileLinks } from "./data/dummy";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import RequiresAuth from "./components/RequiresAuth";
-import Unauthorized from "./components/Unauthorized";
-import PersistLogin from "./components/PersistLogin";
+import { PersistLogin, RequiresAuth, SubLayout, Layout } from "./components";
+import { Home, Favourites, LastSeen, NewAd, Profile, MyAds, Login, Register } from "./pages";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
 
-        {/*Protected for users*/}
         <Route element={<PersistLogin />}>
+          <Route index element={<Home />} />
           <Route element={<RequiresAuth />}>
             <Route
               path="my-profile"

@@ -17,7 +17,7 @@ const app = express()
 connectDB()
 
 //middleware
-// app.use(logger)
+app.use(logger)
 app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(express.json())

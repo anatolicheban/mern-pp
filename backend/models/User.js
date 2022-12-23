@@ -18,7 +18,7 @@ const userSchema = new Schema({
     required: true,
     default: false
   },
-  reqistrationDate: {
+  registrationDate: {
     type: String,
     required: true
   },

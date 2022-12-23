@@ -16,10 +16,6 @@ const add = asyncHandler(async (req, res) => {
   const date = new Date().toISOString()
   const owner = req.userId
 
-  if (!owner) {
-    return res.status(403).json({ message: 'Forbidden' })
-  }
-
   if (!title || !location || !description || !date || !currency || !price) {
     return res.status(400).json({ message: 'Деякі поля слід заповнити' })
   }
@@ -185,7 +181,28 @@ const getMyAds = asyncHandler(async (req, res) => {
   const foundAds = await Advertisment.find({ owner: userId })
     .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
-  res.status(200).header({ Quantity: adsCount }).json(foundAds)
+  let pages = adsCount / adsPerPage
+
+  if (pages % 1 !== 0) {
+    pages = Math.floor(pages) + 1
+  }
+
+  const foundUserFavs = await User.findById(req.userId).select('favourites').lean().exec()
+
+  const foundAdsWithLikes = foundAds.map(item => {
+    if (foundUserFavs.favourites.includes(item._id.toString())) {
+      return { ...item, isLiked: true }
+    }
+    console.log(item.isLiked);
+    return { ...item, isLiked: false }
+  })
+
+  const response = {
+    ads: foundAdsWithLikes,
+    pages
+  }
+
+  res.status(200).json(response)
 })
 
 //@desc SingleAd
@@ -234,7 +251,25 @@ const getLatestAds = asyncHandler(async (req, res) => {
     pages = Math.floor(pages) + 1
   }
 
-  const response = {
+  // console.log(req.userId);
+
+  if (req?.userId) {
+    const foundUserVavs = await User.findById(req.userId).select('favourites').lean().exec()
+    const foundAdsWithLikes = foundAds.map(item => {
+      if (foundUserVavs.favourites.includes(item._id.toString())) {
+        return { ...item, isLiked: true }
+      }
+      return { ...item, isLiked: false }
+    })
+
+    let response = {
+      ads: foundAdsWithLikes,
+      pages
+    }
+    return res.status(200).json(response)
+  }
+
+  let response = {
     ads: foundAds,
     pages
   }
@@ -256,17 +291,26 @@ const getFavAds = asyncHandler(async (req, res) => {
   const foundUser = await User.findById(user).lean().exec()
 
   if (!foundUser) {
-    return res.sendStatus(403).json({ message: "Forbidden" })
+    return res.status(403).json({ message: "Forbidden" })
   }
 
   const favsCount = await Advertisment.find({ _id: { $in: foundUser.favourites } }).count()
 
-  const favourites = await Advertisment.find({ _id: { $in: foundUser.favourites } })
+  let favourites = await Advertisment.find({ _id: { $in: foundUser.favourites } })
     .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
 
+  let pages = favsCount / adsPerPage
 
-  res.status(200).header({ Quantity: favsCount }).json(favourites)
+  if (pages % 1 !== 0) {
+    pages = Math.floor(pages) + 1
+  }
+
+  favourites = favourites.map(item => ({ ...item, isLiked: true }))
+
+
+  res.status(200).json({ ads: favourites, pages })
+  console.log('Sent!');
 })
 
 //@desc toggleLikeAd
@@ -277,8 +321,8 @@ const toggleLikeAd = asyncHandler(async (req, res) => {
   const { id } = req.body
   const foundUser = await User.findById(req.userId).exec()
 
-  if (!foundUser) {
-    return res.status(403).json({ message: "Forbidden" })
+  if (!id) {
+    return res.status(400).json({ message: "Некорректний ідентифікатор" })
   }
 
   //ВАЖНО ЗАПОМНИТЬ!!!!

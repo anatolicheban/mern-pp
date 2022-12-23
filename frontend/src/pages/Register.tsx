@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Container from "../components/UI/Container";
+import { Container } from "../components";
 import { Alert, Button, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../features/auth/authApiSlice";
@@ -52,8 +52,15 @@ const Register = () => {
         email,
       }).unwrap();
     } catch (err: any) {
-      if (err.status === 500) return setErrMsg("Помилка серверу, спробуйте пізніше");
-      setErrMsg(err.data.message);
+      console.log(err);
+      if (err?.data?.message) {
+        setErrMsg(err.data.message);
+        return errRef.current?.focus();
+      }
+      if (err?.data?.status === 529) {
+        return setErrMsg("Забагато запитівб спробуйте пізніше");
+      }
+      setErrMsg("Помилка серверу, спробуйте пізніше");
       errRef.current?.focus();
     }
   };

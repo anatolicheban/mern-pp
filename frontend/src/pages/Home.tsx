@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import Container from "../components/UI/Container";
 import { Button, TextField, Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import AdCard from "../components/AdCard";
 import { useGetLatestAdsQuery } from "../features/ads/adsApiSlice";
-import ErrorMessage from "../components/ErrorMessage";
 import { useSearchParams } from "react-router-dom";
-import NoAdsMessage from "../components/NoAdsMessage";
-import Loader from "../components/Loader";
+import { Loader, NoAdsMessage, ErrorMessage, AdCard, Container } from "../components";
+import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {
+  const auth = useAuth();
+  console.log(auth);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
-  const { isError, isLoading, data, refetch } = useGetLatestAdsQuery(page as number, {
+  const { isError, error, isLoading, data } = useGetLatestAdsQuery(page, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
@@ -26,15 +26,17 @@ const Home = () => {
   }, [page, setSearchParams, data]);
 
   const handlePageChange = (e: React.ChangeEvent<unknown>, value: number) => {
+    if (value === page) return;
     setSearchParams({
       page: value.toString(),
     });
-    refetch();
   };
 
-  if (isLoading) {
-    return <Loader />;
+  if (error?.status === 529) {
+    return <ErrorMessage errMsg="Забагато запитів з цієї IP адреси" />;
   }
+
+  if (isLoading) return <Loader />;
 
   if (isError) return <ErrorMessage />;
 
