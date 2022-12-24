@@ -15,10 +15,10 @@ router.route('/my-ads')
   .get(verifyJWT, getMyAds)
 
 router.route('/single-ad/:id')
-  .get(checkUser, getSingleAd)
+  .get(getSingleAd)
 
 router.route('/latest')
-  .get(checkUser, getLatestAds)
+  .get(getLatestAds)
 
 router.route('/favs')
   .get(verifyJWT, getFavAds)

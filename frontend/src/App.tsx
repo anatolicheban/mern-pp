@@ -1,7 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import { favsLinks, profileLinks } from "./data/dummy";
+import { profileLinks } from "./data/dummy";
 import { PersistLogin, RequiresAuth, SubLayout, Layout } from "./components";
-import { Home, Favourites, LastSeen, NewAd, Profile, MyAds, Login, Register } from "./pages";
+import {
+  Home,
+  Favourites,
+  NewAd,
+  Profile,
+  MyAds,
+  Login,
+  Register,
+  SingleAd,
+  EditAd,
+} from "./pages";
 
 function App() {
   return (
@@ -12,6 +22,15 @@ function App() {
 
         <Route element={<PersistLogin />}>
           <Route index element={<Home />} />
+          <Route path="ads">
+            <Route path=":id">
+              <Route index element={<SingleAd />} />
+              <Route element={<RequiresAuth />}>
+                <Route path="edit" element={<EditAd />} />
+              </Route>
+            </Route>
+          </Route>
+
           <Route element={<RequiresAuth />}>
             <Route
               path="my-profile"
@@ -20,10 +39,7 @@ function App() {
               <Route index element={<Profile />} />
               <Route path="ads" element={<MyAds />} />
             </Route>
-            <Route path="favourites" element={<SubLayout links={favsLinks} title="Обране" />}>
-              <Route index element={<Favourites />} />
-              <Route path="lastseen" element={<LastSeen />} />
-            </Route>
+            <Route path="favourites" element={<Favourites />}></Route>
             <Route path="new-ad" element={<NewAd />} />
           </Route>
         </Route>

@@ -5,30 +5,23 @@ import { Link } from "react-router-dom";
 import { Tooltip, IconButton } from "@mui/material";
 import { useTogleLikeAdMutation } from "../features/ads/adsApiSlice";
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "../utilities/formatPrice";
 
 type AdCardProps = ItemCard;
 
-const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: AdCardProps) => {
+const AdCard = ({ _id, image, title, location, date, price, currency, isLiked }: AdCardProps) => {
   const [like, setLike] = useState(isLiked);
   const navigate = useNavigate();
 
   const [likeAd] = useTogleLikeAdMutation();
 
-  const formatedDate = date ? new Date(date).toLocaleDateString() : null;
-  const formatedPrice = () => {
-    if (currency === "EUR") {
-      return ` ${price + " €"}`;
-    } else if (currency === "UAH") {
-      return ` ${price + " ₴"}`;
-    }
-    return ` ${price + " $"}`;
-  };
+  const formatedPrice = formatPrice(price, currency);
 
   const toggleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
       setLike((prev) => !prev);
-      await likeAd(id).unwrap();
+      await likeAd(_id).unwrap();
       console.log("liked!");
     } catch (err: any) {
       setLike((prev) => !prev);
@@ -43,7 +36,7 @@ const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: 
 
   return (
     <li className="bg-light p-4 hover:shadow-md transition">
-      <Link to={`/ads/${id}`}>
+      <Link to={`/ads/${_id}`}>
         {image ? (
           <img src={image} alt={title} className={"object-cover h-48 w-56 max-w-full"} />
         ) : (
@@ -54,10 +47,10 @@ const AdCard = ({ id, image, title, location, date, price, currency, isLiked }: 
         <p className="mt-2 font-semibold">{title}</p>
         <span className="flex justify-between text-xs gap-1 mt-3">
           <p>{location + " обл."}</p>
-          <p>{formatedDate}</p>
+          <p>{date}</p>
         </span>
         <span className="flex justify-between items-center">
-          <p>{formatedPrice()}</p>
+          <p>{formatedPrice}</p>
           <IconButton color="primary" onClick={toggleLike} sx={{ py: 0 }}>
             <Tooltip title={like ? "Видалити з обранного" : "Додати в обране"}>
               <div className="h-10">{like ? <Favorite /> : <FavoriteBorder />}</div>

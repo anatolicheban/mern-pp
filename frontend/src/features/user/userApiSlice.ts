@@ -1,4 +1,3 @@
-import { url } from "inspector";
 import { apiSlice } from "../../app/api/apiSlice";
 import { GetMyProfileresult } from "../../models/models";
 

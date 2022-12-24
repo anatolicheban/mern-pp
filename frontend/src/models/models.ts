@@ -1,5 +1,5 @@
 export type ItemCard = {
-  id: string;
+  _id: string;
   image: string | null;
   title: string;
   location: string;
@@ -9,19 +9,24 @@ export type ItemCard = {
   isLiked: boolean | undefined;
 };
 
+export type GetSingleAdResult = Omit<ItemCard, "image"> & {
+  description: string;
+  images: string[];
+  ownerUsername: string;
+  ownerEmail: string;
+  ownerRegDate: string;
+  owner: string;
+};
+
 export interface Link {
   name: string;
   path: string;
 }
 
-export interface SingleUser {
-  id: string;
-  username: string;
-  email: string;
-  registerDate: string;
-  adsAmount: number;
-  verified: boolean;
-}
+export type GetAdsResult = {
+  ads: ItemCard[];
+  pages: number;
+};
 
 export interface LoginQueryResult {
   accessToken: string;

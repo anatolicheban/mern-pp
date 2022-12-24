@@ -12,6 +12,7 @@ const MyAds = () => {
   const { isError, error, isLoading, data } = useGetMyAdsQuery(page, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const MyAds = () => {
 
       <ul className="flex flex-wrap gap-4 list-none justify-center mb-8 mt-4">
         {data?.ads.map((item) => (
-          <AdCard key={item.id} {...item} />
+          <AdCard key={item._id} {...item} />
         ))}
       </ul>
       <div className="flex my-4 justify-center">

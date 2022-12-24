@@ -11,6 +11,7 @@ const Favourites = () => {
   const { isError, error, isLoading, data } = useGetFavAdsQuery(page, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
@@ -47,9 +48,10 @@ const Favourites = () => {
 
   return (
     <>
+      <h1 className="text-blue font-bold text-center text-2xl py-5 bg-light">Обране</h1>
       <ul className="flex flex-wrap gap-4 list-none justify-center my-8">
         {data?.ads.map((item) => (
-          <AdCard key={item.id} {...item} />
+          <AdCard key={item._id} {...item} />
         ))}
       </ul>
       <div className="flex my-4 justify-center">

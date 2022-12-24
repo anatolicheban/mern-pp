@@ -13,7 +13,7 @@ const add = asyncHandler(async (req, res) => {
 
   console.log(images);
 
-  const date = new Date().toISOString()
+  const date = new Date().toLocaleDateString()
   const owner = req.userId
 
   if (!title || !location || !description || !date || !currency || !price) {
@@ -212,6 +212,7 @@ const getMyAds = asyncHandler(async (req, res) => {
 const getSingleAd = asyncHandler(async (req, res) => {
   const { id } = req.params
 
+
   if (!id) {
     return res.status(400).json({ message: 'Відсутній ідентифікатор' })
   }
@@ -227,8 +228,21 @@ const getSingleAd = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Оголошення не знайдено' })
   }
 
+  const adOwner = await User.findById(foundAd.owner).lean().exec()
 
-  res.status(200).json(foundAd)
+  if (!adOwner) {
+    return res.status(404).json({ message: 'Власника не оголошення не знайдено, тому воно недійсне' })
+  }
+
+  const response = {
+    ...foundAd,
+    ownerUsername: adOwner.username,
+    ownerEmail: adOwner.email,
+    ownerRegDate: adOwner.registrationDate
+  }
+
+
+  res.status(200).json(response)
 })
 
 //@desc Latest Ads
@@ -251,10 +265,13 @@ const getLatestAds = asyncHandler(async (req, res) => {
     pages = Math.floor(pages) + 1
   }
 
-  // console.log(req.userId);
 
-  if (req?.userId) {
-    const foundUserVavs = await User.findById(req.userId).select('favourites').lean().exec()
+  const { userId } = req.query
+
+  console.log('UserID: ', userId);
+
+  if (userId) {
+    const foundUserVavs = await User.findById(userId).select('favourites').lean().exec()
     const foundAdsWithLikes = foundAds.map(item => {
       if (foundUserVavs.favourites.includes(item._id.toString())) {
         return { ...item, isLiked: true }
@@ -344,7 +361,7 @@ const toggleLikeAd = asyncHandler(async (req, res) => {
 
   const result = await foundUser.save()
 
-  res.status(200).json(result)
+  res.sendStatus(200)
 })
 
 module.exports = { add, deleteAd, update, getMyAds, getSingleAd, getLatestAds, getFavAds, toggleLikeAd }

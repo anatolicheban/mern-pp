@@ -12,10 +12,14 @@ const Home = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
-  const { isError, error, isLoading, data } = useGetLatestAdsQuery(page, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  const { isError, error, isLoading, data } = useGetLatestAdsQuery(
+    { page, userId: auth?.userId },
+    {
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   useEffect(() => {
     if (page < 1 || (data && page > data.pages)) {
@@ -66,7 +70,7 @@ const Home = () => {
           </h2>
           <ul className="flex flex-wrap gap-4 list-none justify-center mb-8">
             {data?.ads.map((item) => (
-              <AdCard key={item.id} {...item} />
+              <AdCard key={item._id} {...item} />
             ))}
           </ul>
         </Container>

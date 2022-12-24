@@ -2,7 +2,7 @@ import { ItemCard, Link } from "../models/models";
 
 export const Ads: ItemCard[] = [
   {
-    id: "1",
+    _id: "1",
     image: "/assets/img/car.jpg",
     title: "Авто",
     location: "Житомирська",
@@ -12,7 +12,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: "2",
+    _id: "2",
     image: "/assets/img/generator.jpg",
     title: "Електрогенератор",
     location: "Київська",
@@ -22,7 +22,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: "3",
+    _id: "3",
     image: "/assets/img/gloves.jpg",
     title: "Перчатки",
     location: "Дніпропетровська",
@@ -32,7 +32,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: "4",
+    _id: "4",
     image: "/assets/img/house.jpg",
     title: "Хата",
     location: "Київська",
@@ -42,7 +42,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: "5",
+    _id: "5",
     image: "/assets/img/sviter.jpg",
     title: "Светр",
     location: "Одеська",
@@ -52,7 +52,7 @@ export const Ads: ItemCard[] = [
     isLiked: true,
   },
   {
-    id: "6",
+    _id: "6",
     image: "/assets/img/toy.webp",
     title: "М'яка іграшка",
     location: "Миколаївcька",
@@ -62,7 +62,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: "7",
+    _id: "7",
     image: "/assets/img/valiza.webp",
     title: "Валіза",
     location: "Одеська",
@@ -72,7 +72,7 @@ export const Ads: ItemCard[] = [
     isLiked: false,
   },
   {
-    id: "8",
+    _id: "8",
     image: null,
     title: "Валіза",
     location: "Одеська",
@@ -125,7 +125,10 @@ export const profileLinks: Link[] = [
   { name: "Мої оголошення", path: "./ads" },
 ];
 
-export const favsLinks: Link[] = [
-  { name: "Список обраного", path: "." },
-  { name: "Недавно переглянуті", path: "./lastseen" },
+export const sliderImages: string[] = [
+  "/assets/img/car.jpg",
+  "/assets/img/generator.jpg",
+  "/assets/img/gloves.jpg",
+  "/assets/img/house.jpg",
+  "/assets/img/test.jpg",
 ];
