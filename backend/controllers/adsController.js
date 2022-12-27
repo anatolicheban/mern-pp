@@ -146,7 +146,7 @@ const update = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Область вказано невірно' })
   }
 
-  if (price && (price > 1000000 || price < 0 || typeof price !== 'number')) {
+  if (price && (+price > 1000000 || +price < 0)) {
     return res.status(400).json({ message: 'Введіть корректну ціну' })
   }
   if (currency && currency !== 'UAH' && currency !== 'USD' && currency !== 'EUR') {

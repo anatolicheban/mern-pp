@@ -16,7 +16,7 @@ import { DeleteAd, MyModal } from "../components";
 const SingleAd = () => {
   const { id } = useParams();
   const [isEmailVisible, setIsEmailVisible] = useState(false);
-  const { data, isLoading, isError, error } = useGetSingleAdQuery(id as string);
+  const { data, isLoading, isError, error } = useGetSingleAdQuery(id as string, {refetchOnMountOrArgChange: true});
   const auth = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
