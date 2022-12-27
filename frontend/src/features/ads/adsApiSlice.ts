@@ -67,6 +67,29 @@ export const adsApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: (result, err, arg) => [{ type: "Ads", id: arg }],
     }),
+    postAd: builder.mutation<{ id: string }, FormData>({
+      query: (body) => ({
+        url: "/ads/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "Ads", id: "LIST" }],
+    }),
+    editAd: builder.mutation<{ id: string }, FormData>({
+      query: (body) => ({
+        url: "/ads/",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: [{ type: "Ads", id: "LIST" }],
+    }),
+    deleteAd: builder.mutation<{ message: string }, string>({
+      query: (id) => ({
+        url: "/ads",
+        method: "DELETE",
+        body: { id },
+      }),
+    }),
   }),
 });
 
@@ -76,4 +99,7 @@ export const {
   useTogleLikeAdMutation,
   useGetFavAdsQuery,
   useGetSingleAdQuery,
+  usePostAdMutation,
+  useEditAdMutation,
+  useDeleteAdMutation,
 } = adsApiSlice;

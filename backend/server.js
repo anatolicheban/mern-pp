@@ -8,13 +8,15 @@ const mongoose = require('mongoose')
 const connectDB = require('./config/dbConn')
 const authRoutes = require('./routes/authRoutes')
 const adsRoutes = require('./routes/adsRoutes')
-const upload = require('multer')()
 const userRoutes = require('./routes/userRoutes')
+const multer = require('multer')
 const PORT = process.env.PORT || 3500
 
 const app = express()
 
 connectDB()
+
+const upload = require('multer')()
 
 //middleware
 app.use(logger)

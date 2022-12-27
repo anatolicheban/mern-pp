@@ -13,6 +13,10 @@ const adSchema = new Schema({
     type: String,
     required: true
   },
+  categories: {
+    type: Array,
+    default: []
+  },
   location: {
     type: String,
     required: true

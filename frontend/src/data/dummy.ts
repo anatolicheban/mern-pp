@@ -1,87 +1,4 @@
-import { ItemCard, Link } from "../models/models";
-
-export const Ads: ItemCard[] = [
-  {
-    _id: "1",
-    image: "/assets/img/car.jpg",
-    title: "Авто",
-    location: "Житомирська",
-    date: "2022-12-12T20:36:13.554Z",
-    price: 5000,
-    currency: "EUR",
-    isLiked: false,
-  },
-  {
-    _id: "2",
-    image: "/assets/img/generator.jpg",
-    title: "Електрогенератор",
-    location: "Київська",
-    date: "2022-12-11T20:36:13.554Z",
-    price: 25000,
-    currency: "UAH",
-    isLiked: true,
-  },
-  {
-    _id: "3",
-    image: "/assets/img/gloves.jpg",
-    title: "Перчатки",
-    location: "Дніпропетровська",
-    date: "2022-11-12T18:36:13.554Z",
-    price: 1000,
-    currency: "UAH",
-    isLiked: false,
-  },
-  {
-    _id: "4",
-    image: "/assets/img/house.jpg",
-    title: "Хата",
-    location: "Київська",
-    date: "2022-11-09T20:36:13.554Z",
-    price: 100000,
-    currency: "USD",
-    isLiked: true,
-  },
-  {
-    _id: "5",
-    image: "/assets/img/sviter.jpg",
-    title: "Светр",
-    location: "Одеська",
-    date: "2022-12-08T20:36:13.554Z",
-    price: 500,
-    currency: "UAH",
-    isLiked: true,
-  },
-  {
-    _id: "6",
-    image: "/assets/img/toy.webp",
-    title: "М'яка іграшка",
-    location: "Миколаївcька",
-    date: "2022-12-11T06:36:13.554Z",
-    price: 300,
-    currency: "UAH",
-    isLiked: false,
-  },
-  {
-    _id: "7",
-    image: "/assets/img/valiza.webp",
-    title: "Валіза",
-    location: "Одеська",
-    date: "2022-11-10T20:36:13.554Z",
-    price: 2500,
-    currency: "UAH",
-    isLiked: false,
-  },
-  {
-    _id: "8",
-    image: null,
-    title: "Валіза",
-    location: "Одеська",
-    date: "2022-11-10T20:36:13.554Z",
-    price: 2500,
-    currency: "UAH",
-    isLiked: false,
-  },
-];
+import { Link } from "../models/models";
 
 export const locations: string[] = [
   "Одеська",
@@ -109,17 +26,6 @@ export const locations: string[] = [
   "Чернівецька",
   "",
 ];
-
-export const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-];
-
 export const profileLinks: Link[] = [
   { name: "Особисті дані", path: "." },
   { name: "Мої оголошення", path: "./ads" },
@@ -131,4 +37,24 @@ export const sliderImages: string[] = [
   "/assets/img/gloves.jpg",
   "/assets/img/house.jpg",
   "/assets/img/test.jpg",
+];
+
+export const adCategories: string[] = [
+  "Б/У",
+  "Взуття",
+  "Одяг",
+  "Робота",
+  "Нерухомість",
+  "Дитячий світ",
+  "Хоббі та спорт",
+  "Бізнес-послуги",
+  "Обмін",
+  "Віддам даром",
+  "Тварини",
+  "Іграшки",
+  "Дом і сад",
+  "Побутова техніка",
+  "Електроніка",
+  "Нове",
+  "Інструменти",
 ];

@@ -1,58 +1,75 @@
-import React, { useState, useRef, useEffect } from "react";
-import { TextField, Button, Tooltip, Chip, Autocomplete } from "@mui/material";
-import { top100Films, locations } from "../data/dummy";
-import { AddAPhoto, Delete } from "@mui/icons-material";
-import { Container } from "../components";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Alert, Select, MenuItem } from "@mui/material";
+import { adCategories, locations } from "../data/dummy";
+import {
+  Container,
+  SimpleInput,
+  CategoriesInput,
+  ImagesInput,
+  LocationInput,
+  Loader,
+} from "../components";
+import { usePostAdMutation } from "../features/ads/adsApiSlice";
+import { useNavigate } from "react-router";
+import { Currency } from "../models/models";
 
 const NewAd = () => {
+  const navigate = useNavigate();
+
+  //Fields states
+  const [title, setTitle] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
-  const [imagesPreviews, setImagesPreviews] = useState<{ url: string; name: string }[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [desc, setDesc] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState<string>("");
+  const [price, setPrice] = useState("");
+  const [currency, setCurrency] = useState<Currency>("UAH");
+  console.log(price);
 
-  const fileInput = useRef<HTMLInputElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
 
-  const onFileBtnClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    fileInput.current?.click();
-  };
+  const [errMsg, setErrMsg] = useState("");
 
-  const onDeleteFile = (e: React.MouseEvent<SVGSVGElement>) => {
-    const imageUrl = e.currentTarget.dataset.url;
-    const imageName = e.currentTarget.dataset.name;
-    if (imageUrl) {
-      URL.revokeObjectURL(imageUrl);
-    }
-    setImages((prev) => {
-      return prev.filter((item) => item.name !== imageName);
+  const [postAd, { isLoading }] = usePostAdMutation();
+
+  const handlePostAd = async () => {
+    const body = new FormData();
+    body.append("title", title);
+    images.forEach((file) => {
+      body.append("images", file);
     });
+    categories.forEach((item) => {
+      body.append("categories", item);
+    });
+    body.append("description", desc);
+    body.append("location", location);
+    body.append("price", price);
+    body.append("currency", currency);
+
+    try {
+      const { id } = await postAd(body).unwrap();
+      navigate(`/ads/${id}`);
+    } catch (err: any) {
+      console.log(err);
+      errorRef.current?.focus();
+      if (err?.data?.status === 529) return setErrMsg("Забагато запитів, спробуйте пізніше");
+      if (err?.data?.status === 500) return setErrMsg("Сталася помилка серверу!");
+      if (err?.data?.status === 401)
+        return navigate("/login", { state: { errorMsg: "Увійдіть до системи для цієї дії" } });
+      if (err?.data?.message) return setErrMsg(err.data.message);
+      setErrMsg("Сталася непередбачувана помилка :(");
+    }
   };
 
   useEffect(() => {
-    const imagesPreviewsArray = images.map((file) => {
-      return {
-        url: URL.createObjectURL(file),
-        name: file.name,
-      };
-    });
+    setErrMsg("");
+  }, [title, categories, images, desc, location]);
 
-    setImagesPreviews(imagesPreviewsArray);
-  }, [images]);
+  useEffect(() => {
+    if (errMsg) errorRef.current?.scrollIntoView();
+  }, [errMsg]);
 
-  const onSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-    const selectedFilesArray = Array.from(selectedFiles as ArrayLike<File>);
-
-    setImages((prev) => {
-      if ([...prev, ...selectedFilesArray].length > 5) {
-        return prev;
-      }
-      return [...prev, ...selectedFilesArray];
-    });
-    // FOR BUG IN CHROME
-    event.target.value = "";
-  };
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-light">
@@ -60,36 +77,19 @@ const NewAd = () => {
         <h1 className="pb-8 text-2xl font-semibold text-blue">Створити оголошення</h1>
         <form>
           <div className="text-2xl bg-white p-4 mb-4">
+            {errMsg && (
+              <Alert severity="error" aria-live="assertive" className="py-2" ref={errorRef}>
+                {errMsg}
+              </Alert>
+            )}
             <h3 className="mb-4">Опишіть товар</h3>
-            <TextField
-              label="Вкажіть назву"
-              variant="filled"
-              fullWidth
-              InputProps={{ className: "max-w-[32rem] w-full" }}
-            />
+            <SimpleInput label="Вкажіть назву" value={title} onChange={setTitle} />
             <div className="mt-4">
               <div className="max-w-[42rem]">
-                <Autocomplete
+                <CategoriesInput
                   value={categories}
-                  onChange={(e, newValue) => setCategories(newValue)}
-                  multiple
-                  options={top100Films.map((option) => option.title)}
-                  renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => (
-                      <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="filled"
-                      label="Категорії"
-                      placeholder="Обрати категорію"
-                      sx={{
-                        maxWidth: "48rem",
-                      }}
-                    />
-                  )}
+                  options={adCategories}
+                  onChange={setCategories}
                 />
               </div>
             </div>
@@ -98,133 +98,55 @@ const NewAd = () => {
             <h3 className="mb-4">
               Фото товару <span className="text-lg font-medium">{"(до 5 зображень)"}</span>
             </h3>
-            <div className="flex flex-wrap gap-4 px-4">
-              <input
-                onChangeCapture={onSelectFile}
-                type={"file"}
-                ref={fileInput}
-                accept={".webp, .png, .jpg, .jpeg"}
-                multiple
-                className="hidden"
-              />
-              {images.length === 5 || (
-                <div className="bg-light h-40 w-52 flex items-center justify-center relative">
-                  <AddAPhoto className="absolute !w-16 !h-16 opacity-[0.15]" />
-                  <button
-                    className="text-base font-semibold hover:underline z-20"
-                    onClick={onFileBtnClick}
-                  >
-                    Додати фото
-                  </button>
-                </div>
-              )}
-              {imagesPreviews.map((item) => (
-                <div key={item.url} className="relative">
-                  <img
-                    src={item.url}
-                    alt="Error! Retry uploading"
-                    className="h-40 object-cover w-52"
-                  />
-                  <div className="absolute opacity-0 w-full h-full bg-light top-0 hover:opacity-50 flex items-center justify-center hover:first:opacity-50">
-                    <Tooltip title="Видалити">
-                      <Delete
-                        data-url={item.url}
-                        data-name={item.name}
-                        className="cursor-pointer !h-8 !w-8"
-                        onClick={onDeleteFile}
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ImagesInput images={images} onChange={setImages} />
           </div>
           <div className="text-2xl bg-white p-4 mb-4">
             <h3 className="mb-4">Опишіть ваш товар</h3>
-            <TextField
+            <SimpleInput
               label="Опис"
               placeholder="Подумайте, що ви хотіли б дізатися про оголошення, та додайте це в опис"
               multiline
-              variant="filled"
               value={desc}
-              onChange={(e) => {
-                setDesc(e.target.value);
-              }}
-              sx={{
-                maxWidth: "32rem",
-                width: "100%",
-              }}
+              onChange={setDesc}
             />
+
             <div className="flex justify-between mt-2">
-              <p className="text-sm text-blue">Залишилось ще {80 - desc.length} символів</p>
-              <p className="text-sm text-blue">{desc.length}/9000</p>
+              <p className="text-sm text-blue">
+                {80 - desc.length > 0 && `Залишилось ще ${80 - desc.trim().length} символів`}
+              </p>
+
+              <p className="text-sm text-blue">{desc.trim().length}/9000</p>
             </div>
           </div>
           <div className="text-2xl bg-white p-4 mb-4">
             <h3 className="mb-4">Місцезнаходження</h3>
-            <Autocomplete
-              autoComplete={false}
-              noOptionsText="Область не знайдено"
-              disablePortal
-              options={locations}
-              value={location}
-              onChange={(e, newValue) => {
-                setLocation(newValue as string);
-              }}
-              sx={{
-                maxWidth: "32rem",
-                width: "100%",
-              }}
-              renderInput={(params) => (
-                <TextField
-                  variant="filled"
-                  type={"text"}
-                  {...params}
-                  label="Область"
-                  placeholder="Вкажіть область вашого нас. пункту"
-                />
-              )}
-            />
+            <LocationInput value={location as string} onChange={setLocation} options={locations} />
           </div>
           <div className="text-2xl bg-white p-4 mb-4">
-            <h3 className="mb-4">Контактні дані</h3>
-            <div>
-              <TextField
-                variant="filled"
-                label="Ім'я"
-                type="text"
-                sx={{
-                  maxWidth: "32rem",
-                  width: "100%",
-                }}
+            <h3 className="mb-4">Ціна</h3>
+            <div className="flex gap-4">
+              <SimpleInput
+                label="Вкажіть ціну"
+                type={"number"}
+                value={price}
+                onChange={setPrice}
+                sx={{ maxWidth: "15rem", w: "100%" }}
               />
-            </div>
-            <div className="mt-4">
-              <TextField
+              <Select
                 variant="filled"
-                label="Email-адреса"
-                type={"email"}
-                sx={{
-                  maxWidth: "32rem",
-                  width: "100%",
-                }}
-              />
-            </div>
-            <div className="mt-4">
-              <TextField
-                variant="filled"
-                label="Номер телефону"
-                type={"tel"}
-                sx={{
-                  maxWidth: "32rem",
-                  width: "100%",
-                }}
-              />
+                onChange={(e) => setCurrency(e.target.value as Currency)}
+                value={currency}
+                label="w"
+              >
+                <MenuItem value="UAH">UAH</MenuItem>
+                <MenuItem value="USD">USD</MenuItem>
+                <MenuItem value="EUR">EUR</MenuItem>
+              </Select>
             </div>
           </div>
           <div className="mt-4 bg-white p-3 flex justify-end">
-            <Button className="" variant="contained">
-              Опублікувати
+            <Button disabled={isLoading} variant="contained" onClick={handlePostAd}>
+              {isLoading ? "Обробка..." : "Опублікувати"}
             </Button>
           </div>
         </form>

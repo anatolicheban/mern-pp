@@ -3,15 +3,17 @@ const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 const locations = require('../data/locations')
 const { default: mongoose } = require('mongoose')
+const adCategories = require('../data/adCategories')
 
 //@desc Add
 //@route POST /ads
 //@access Private
 const add = asyncHandler(async (req, res) => {
 
-  const { title, location, description, currency, price, images } = req.body
-
+  const { title, location, description, categories, currency, price, images } = req.body
+  console.log(req.files);
   console.log(images);
+  console.log(categories);
 
   const date = new Date().toLocaleDateString()
   const owner = req.userId
@@ -21,19 +23,17 @@ const add = asyncHandler(async (req, res) => {
   }
 
 
-  if (title.length < 8) {
+  if (title.trim().length < 8) {
     return res.status(400).json({ message: 'Назва оголошення надто коротка' })
   }
-
-  if (title.length > 50) {
+  if (title.trim().length > 50) {
     return res.status(400).json({ message: 'Назва оголошення надто довга' })
   }
 
-  if (description.length < 80) {
+  if (description.trim().length < 80) {
     return res.status(400).json({ message: 'Опис оголошення надто короткий' })
   }
-
-  if (description.length > 9000) {
+  if (description.trim().length > 9000) {
     return res.status(400).json({ message: 'Опис оголошення надто довгий' })
   }
 
@@ -41,17 +41,25 @@ const add = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Область вказано невірно' })
   }
 
-  if (price > 1000000) {
+  if (price > 1000000 || price < 0) {
     return res.status(400).json({ message: 'Введіть корректну ціну' })
   }
   if (currency !== 'UAH' && currency !== 'USD' && currency !== 'EUR') {
     return res.status(400).json({ message: 'Валюту вказано невірно' })
   }
 
-  //Checking for verified account
-  if (req.verified) {
-    return res.status(403).json({ message: 'Ваш аккаунт має бути верифікований' })
+  if (!categories.every(item => {
+    return adCategories.includes(item)
+  })) {
+    return res.status(400).json({ message: 'Категорії вказано невірно' })
   }
+
+
+
+  //Checking for verified account
+  // if (req.verified) {
+  //   return res.status(403).json({ message: 'Ваш аккаунт має бути верифікований' })
+  // }
 
 
   const result = await Advertisment.create({
@@ -61,12 +69,13 @@ const add = asyncHandler(async (req, res) => {
     date,
     owner,
     price,
-    currency
+    currency,
+    categories
   }).catch((err) => {
     return res.status(500).send(err)
   })
 
-  res.status(200).json(result)
+  res.status(200).json({ id: result._id })
 })
 
 //@desc Delete
@@ -97,7 +106,7 @@ const deleteAd = asyncHandler(async (req, res) => {
   }
 
   const result = await foundAd.delete()
-  res.status(200).json(result)
+  res.status(200).json({ message: `Оголошення з ID: ${id} видалено` })
 })
 
 //@desc Update
@@ -117,19 +126,19 @@ const update = asyncHandler(async (req, res) => {
   }
 
 
-  if (title?.length < 8) {
+  if (title?.trim().length < 8) {
     return res.status(400).json({ message: 'Назва оголошення надто коротка' })
   }
 
-  if (title?.length > 50) {
+  if (title?.trim().length > 50) {
     return res.status(400).json({ message: 'Назва оголошення надто довга' })
   }
 
-  if (description?.length < 80) {
+  if (description?.trim().length < 80) {
     return res.status(400).json({ message: 'Опис оголошення надто короткий' })
   }
 
-  if (description?.length > 9000) {
+  if (description?.trim().length > 9000) {
     return res.status(400).json({ message: 'Опис оголошення надто довгий' })
   }
 
@@ -137,7 +146,7 @@ const update = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Область вказано невірно' })
   }
 
-  if (price && price > 1000000) {
+  if (price && (price > 1000000 || price < 0 || typeof price !== 'number')) {
     return res.status(400).json({ message: 'Введіть корректну ціну' })
   }
   if (currency && currency !== 'UAH' && currency !== 'USD' && currency !== 'EUR') {
@@ -162,7 +171,7 @@ const update = asyncHandler(async (req, res) => {
 
   const result = await foundAd.save()
 
-  res.status(200).json(result)
+  res.status(200).json({ id: result._id })
 
 })
 
@@ -361,7 +370,7 @@ const toggleLikeAd = asyncHandler(async (req, res) => {
 
   const result = await foundUser.save()
 
-  res.sendStatus(200)
+  res.status(200).json(result)
 })
 
 module.exports = { add, deleteAd, update, getMyAds, getSingleAd, getLatestAds, getFavAds, toggleLikeAd }

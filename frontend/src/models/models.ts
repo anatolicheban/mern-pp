@@ -4,7 +4,7 @@ export type ItemCard = {
   title: string;
   location: string;
   date: string;
-  price: number;
+  price: string;
   currency: "USD" | "UAH" | "EUR";
   isLiked: boolean | undefined;
 };
@@ -16,6 +16,7 @@ export type GetSingleAdResult = Omit<ItemCard, "image"> & {
   ownerEmail: string;
   ownerRegDate: string;
   owner: string;
+  categories: string[];
 };
 
 export interface Link {
@@ -61,3 +62,5 @@ export interface GetMyProfileresult {
   adsAmount: number;
   registrationDate: string;
 }
+
+export type Currency = "UAH" | "USD" | "EUR";

@@ -12,3 +12,11 @@ export { default as RequiresAuth } from "./RequiresAuth";
 export { default as SubLayout } from "./SubLayout";
 export { default as Unauthorized } from "./Unauthorized";
 export { default as Container } from "./UI/Container";
+export { default as MyModal } from "./UI/MyModal";
+export { default as DeleteAd } from "./DeleteAd";
+
+//Inputs
+export { default as CategoriesInput } from "./UI/Inputs/CategoriesInput";
+export { default as ImagesInput } from "./UI/Inputs/ImagesInput";
+export { default as SimpleInput } from "./UI/Inputs/SimpleInput";
+export { default as LocationInput } from "./UI/Inputs/LocationInput";

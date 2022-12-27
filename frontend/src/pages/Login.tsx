@@ -39,15 +39,11 @@ const Login = () => {
     } catch (err: any) {
       //Get err types from backend AND from RTK Query FetchBaseQueryError
       console.log(err);
-      if (err?.data?.message) {
-        setErrMsg(err.data.message);
-        return errRef.current?.focus();
-      }
-      if (err?.data?.status === 529) {
-        return setErrMsg("Забагато запитівб спробуйте пізніше");
-      }
-      setErrMsg("Помилка серверу, спробуйте пізніше");
       errRef.current?.focus();
+      if (err?.data?.status === 529) return setErrMsg("Забагато запитів, спробуйте пізніше");
+      if (err?.data?.status === 500) return setErrMsg("Сталася помилка серверу!");
+      if (err?.data?.message) return setErrMsg(err.data.message);
+      setErrMsg("Помилка серверу, спробуйте пізніше");
     }
   };
 

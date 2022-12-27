@@ -15,7 +15,7 @@ const AdCard = ({ _id, image, title, location, date, price, currency, isLiked }:
 
   const [likeAd] = useTogleLikeAdMutation();
 
-  const formatedPrice = formatPrice(price, currency);
+  const formatedPrice = formatPrice(+price, currency);
 
   const toggleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

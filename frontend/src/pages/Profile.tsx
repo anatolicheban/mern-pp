@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@mui/material";
 import { useGetMyProfileQuery } from "../features/user/userApiSlice";
 import { Navigate } from "react-router";

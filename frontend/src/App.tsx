@@ -39,8 +39,8 @@ function App() {
               <Route index element={<Profile />} />
               <Route path="ads" element={<MyAds />} />
             </Route>
-            <Route path="favourites" element={<Favourites />}></Route>
             <Route path="new-ad" element={<NewAd />} />
+            <Route path="favourites" element={<Favourites />}></Route>
           </Route>
         </Route>
       </Route>
