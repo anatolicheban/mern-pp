@@ -14,6 +14,8 @@ export { default as Unauthorized } from "./Unauthorized";
 export { default as Container } from "./UI/Container";
 export { default as MyModal } from "./UI/MyModal";
 export { default as DeleteAd } from "./DeleteAd";
+export { default as SearchField } from "./SearchField";
+export { default as LogoutBtn } from "./UI/LogoutBtn";
 
 //Inputs
 export { default as CategoriesInput } from "./UI/Inputs/CategoriesInput";

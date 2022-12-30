@@ -265,7 +265,7 @@ const getLatestAds = asyncHandler(async (req, res) => {
 
   const adsCount = await Advertisment.find().count()
 
-  const foundAds = await Advertisment.find()
+  let foundAds = await Advertisment.find()
     .select('-owner -__v').sort({ $natural: -1 }).skip((page - 1) * adsPerPage).limit(adsPerPage).lean().exec()
 
   let pages = adsCount / adsPerPage
@@ -281,23 +281,18 @@ const getLatestAds = asyncHandler(async (req, res) => {
 
   if (userId) {
     const foundUserVavs = await User.findById(userId).select('favourites').lean().exec()
-    const foundAdsWithLikes = foundAds.map(item => {
+    foundAds = foundAds.map(item => {
       if (foundUserVavs.favourites.includes(item._id.toString())) {
         return { ...item, isLiked: true }
       }
       return { ...item, isLiked: false }
     })
-
-    let response = {
-      ads: foundAdsWithLikes,
-      pages
-    }
-    return res.status(200).json(response)
   }
 
   let response = {
     ads: foundAds,
-    pages
+    pages,
+    count: adsCount
   }
 
   res.status(200).json(response)
@@ -373,4 +368,36 @@ const toggleLikeAd = asyncHandler(async (req, res) => {
   res.status(200).json(result)
 })
 
-module.exports = { add, deleteAd, update, getMyAds, getSingleAd, getLatestAds, getFavAds, toggleLikeAd }
+const searchAds = asyncHandler(async (req, res) => {
+
+  const { keyword, categories } = req.body
+  const { onlyTitles } = req.query
+
+  console.log(categories);
+
+  let foundAds;
+
+  if (onlyTitles) {
+    foundAds = await Advertisment.find({ title: { $regex: new RegExp('^' + keyword + '.*', 'i') } }).select('title _id')
+  } else {
+    foundAds = await Advertisment.find({ title: { $regex: new RegExp('^' + keyword + '.*', 'i') } }).exec()
+
+    if (categories.length) {
+      foundAds = foundAds.filter((item) => {
+        return categories.every((el) => {
+          return item.categories.includes(el)
+        })
+      })
+    }
+  }
+
+
+
+
+  //limit
+  foundAds = foundAds.slice(0, 10)
+  res.status(200).json(foundAds)
+
+})
+
+module.exports = { add, deleteAd, update, getMyAds, getSingleAd, getLatestAds, getFavAds, toggleLikeAd, searchAds }

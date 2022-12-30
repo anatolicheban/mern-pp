@@ -1,7 +1,7 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { ResultDescription } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { apiSlice } from "../../app/api/apiSlice";
-import { GetAdsResult, GetSingleAdResult } from "../../models/models";
+import { GetAdsResult, GetSingleAdResult, SearchResult } from "../../models/models";
 
 const providesTags:
   | ResultDescription<
@@ -90,6 +90,15 @@ export const adsApiSlice = apiSlice.injectEndpoints({
         body: { id },
       }),
     }),
+    searchAds: builder.query<SearchResult, { keyword: string }>({
+      query: ({ keyword }) => ({
+        url: "/ads/search?onlyTitles=true",
+        method: "POST",
+        body: {
+          keyword,
+        },
+      }),
+    }),
   }),
 });
 
@@ -102,4 +111,5 @@ export const {
   usePostAdMutation,
   useEditAdMutation,
   useDeleteAdMutation,
+  useLazySearchAdsQuery,
 } = adsApiSlice;

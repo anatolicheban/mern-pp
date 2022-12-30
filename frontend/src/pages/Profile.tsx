@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useGetMyProfileQuery } from "../features/user/userApiSlice";
 import { Navigate } from "react-router";
-import { Loader, ErrorMessage } from "../components";
+import { Loader, ErrorMessage, LogoutBtn } from "../components";
 
 const Profile = () => {
   const { data: profile, isLoading, isError, error } = useGetMyProfileQuery();
@@ -23,7 +23,8 @@ const Profile = () => {
 
   return (
     <>
-      <div className="bg-light p-4 mt-4 flex gap-4">
+      <div className="bg-light p-4 mt-4 flex gap-4 relative">
+        <LogoutBtn />
         <div>
           <img
             className="rounded-full object-cover h-[15rem] max-w-[15rem]"

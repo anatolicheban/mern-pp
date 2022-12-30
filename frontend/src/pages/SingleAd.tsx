@@ -16,7 +16,9 @@ import { DeleteAd, MyModal } from "../components";
 const SingleAd = () => {
   const { id } = useParams();
   const [isEmailVisible, setIsEmailVisible] = useState(false);
-  const { data, isLoading, isError, error } = useGetSingleAdQuery(id as string, {refetchOnMountOrArgChange: true});
+  const { data, isLoading, isError, error } = useGetSingleAdQuery(id as string, {
+    refetchOnMountOrArgChange: true,
+  });
   const auth = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -87,19 +89,18 @@ const SingleAd = () => {
         <p className="text-blue text-3xl mt-2 font-bold">{formatedPrice}</p>
         <div className="my-2 flex flex-wrap gap-2">
           {data?.categories?.map((item) => (
-            <Link key={item} to={`/search&categories=${item}`}>
-              <Chip
-                label={item}
-                variant="outlined"
-                sx={{
-                  cursor: "pointer",
-                  "&:hover": {
-                    bgcolor: "#4cbfa6",
-                    color: "#fff",
-                  },
-                }}
-              />
-            </Link>
+            <Chip
+              key={item}
+              label={item}
+              variant="outlined"
+              sx={{
+                cursor: "pointer",
+                "&:hover": {
+                  bgcolor: "#4cbfa6",
+                  color: "#fff",
+                },
+              }}
+            />
           ))}
         </div>
         <p className="mt-4">

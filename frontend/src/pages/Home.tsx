@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Button, TextField, Pagination } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Pagination } from "@mui/material";
 import { useGetLatestAdsQuery } from "../features/ads/adsApiSlice";
 import { useSearchParams } from "react-router-dom";
-import { Loader, NoAdsMessage, ErrorMessage, AdCard, Container } from "../components";
+import { Loader, NoAdsMessage, ErrorMessage, AdCard, Container, SearchField } from "../components";
 import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {
@@ -47,21 +46,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="bg-light py-6">
-        <Container>
-          <div className="flex gap-4">
-            <TextField
-              label={"Пошук"}
-              placeholder={"Пошук серед 1 939 оголошень"}
-              fullWidth
-              color="primary"
-            />
-            <Button className="max-w-[12rem] w-full" variant="contained">
-              <SearchIcon />
-            </Button>
-          </div>
-        </Container>
-      </div>
+      <SearchField count={data?.count} />
       <div>
         <Container>
           <h2 className="text-blue text-2xl text-center py-3 font-semibold mt-2">

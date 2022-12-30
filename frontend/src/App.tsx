@@ -20,18 +20,14 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
 
+        <Route path="ads/:id" element={<SingleAd />} />
+
         <Route element={<PersistLogin />}>
           <Route index element={<Home />} />
-          <Route path="ads">
-            <Route path=":id">
-              <Route index element={<SingleAd />} />
-              <Route element={<RequiresAuth />}>
-                <Route path="edit" element={<EditAd />} />
-              </Route>
-            </Route>
-          </Route>
 
           <Route element={<RequiresAuth />}>
+            <Route path="edit" element={<EditAd />} />
+
             <Route
               path="my-profile"
               element={<SubLayout links={profileLinks} title="Мій профіль" />}

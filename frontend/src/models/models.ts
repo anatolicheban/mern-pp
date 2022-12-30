@@ -27,6 +27,7 @@ export interface Link {
 export type GetAdsResult = {
   ads: ItemCard[];
   pages: number;
+  count?: number;
 };
 
 export interface LoginQueryResult {
@@ -62,5 +63,7 @@ export interface GetMyProfileresult {
   adsAmount: number;
   registrationDate: string;
 }
+
+export type SearchResult = { _id: string; title: string }[];
 
 export type Currency = "UAH" | "USD" | "EUR";
