@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.090b2697.css",
-    "main.js": "/static/js/main.d7e79345.js",
-    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
-    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
-    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
-    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
-    "index.html": "/index.html",
-    "main.090b2697.css.map": "/static/css/main.090b2697.css.map",
-    "main.d7e79345.js.map": "/static/js/main.d7e79345.js.map"
+    "main.css": "/mern-pp/static/css/main.b59fb984.css",
+    "main.js": "/mern-pp/static/js/main.0a63ef78.js",
+    "static/media/slick.svg": "/mern-pp/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/mern-pp/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/mern-pp/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/mern-pp/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/mern-pp/index.html",
+    "main.b59fb984.css.map": "/mern-pp/static/css/main.b59fb984.css.map",
+    "main.0a63ef78.js.map": "/mern-pp/static/js/main.0a63ef78.js.map"
   },
   "entrypoints": [
-    "static/css/main.090b2697.css",
-    "static/js/main.d7e79345.js"
+    "static/css/main.b59fb984.css",
+    "static/js/main.0a63ef78.js"
   ]
 }
