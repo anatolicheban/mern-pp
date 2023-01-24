@@ -8,6 +8,7 @@ import { setCredentials } from "../features/auth/authSlice";
 import { isPwdCorrect } from "../utilities/isPwdCorrect";
 import { isUsernameCorrect } from "../utilities/isUsernameCorrect";
 import usePersist from "../hooks/usePersist";
+import { apiSlice } from "../app/api/apiSlice";
 
 const Login = () => {
   const errRef = useRef<HTMLParagraphElement>(null);
@@ -35,6 +36,7 @@ const Login = () => {
       dispatch(setCredentials({ accessToken }));
       setUsername("");
       setPassword("");
+      apiSlice.util.invalidateTags(["Ads"]);
       navigate(location.state?.from || "/?page=1");
     } catch (err: any) {
       //Get err types from backend AND from RTK Query FetchBaseQueryError

@@ -4,7 +4,7 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolk
 import { RootState } from "../store";
 
 const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = fetchBaseQuery({
-  baseUrl: "http://localhost:3001",
+  baseUrl: "http://83.229.85.165",
   credentials: "include",
   prepareHeaders: (headers, api) => {
     const state = api.getState() as RootState;

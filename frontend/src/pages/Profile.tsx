@@ -46,14 +46,14 @@ const Profile = () => {
           </p>
         </div>
       </div>
-      <div className="flex justify-end my-4 bg-light p-4">
+      {/* <div className="flex justify-end my-4 bg-light p-4">
         <div className="flex gap-4 flex-wrap">
           <Button variant="contained">Змінити аватар</Button>
           <Button variant="contained">Змінити номер тел.</Button>
           <Button variant="contained">Змінити пароль</Button>
           <Button variant="contained">Змінити ім'я користувача</Button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -19,14 +19,13 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-
         <Route path="ads/:id" element={<SingleAd />} />
 
         <Route element={<PersistLogin />}>
           <Route index element={<Home />} />
 
           <Route element={<RequiresAuth />}>
-            <Route path="edit" element={<EditAd />} />
+            <Route path="ads/:id/edit" element={<EditAd />} />
 
             <Route
               path="my-profile"

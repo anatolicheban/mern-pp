@@ -18,7 +18,7 @@ const Register = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [username, password]);
+  }, [username, password, duplPassword, email]);
 
   const [register, { isLoading, isSuccess }] = useRegisterMutation();
 
