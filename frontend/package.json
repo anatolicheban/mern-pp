@@ -1,8 +1,8 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "https://anatolicheban.github.io",
+  "private": false,
+  "homepage": "https://anatolicheban.github.io/mern-pp/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
