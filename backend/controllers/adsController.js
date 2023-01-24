@@ -56,7 +56,7 @@ const add = asyncHandler(async (req, res) => {
 
 
 
-  //Checking for verified account
+  // Checking for verified account
   // if (req.verified) {
   //   return res.status(403).json({ message: 'Ваш аккаунт має бути верифікований' })
   // }
@@ -114,7 +114,7 @@ const deleteAd = asyncHandler(async (req, res) => {
 //@access Private
 
 const update = asyncHandler(async (req, res) => {
-  const { id, title, location, description, currency, price } = req.body
+  const { id, title, location, description, currency, price, categories } = req.body
 
   //Validating fields
   if (!id) {
@@ -168,6 +168,7 @@ const update = asyncHandler(async (req, res) => {
   if (description) foundAd.description = description
   if (currency) foundAd.currency = currency
   if (price) foundAd.price = price
+  if (categories) foundAd.categories = categories
 
   const result = await foundAd.save()
 
