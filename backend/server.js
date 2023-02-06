@@ -21,7 +21,7 @@ const upload = require('multer')()
 //middleware
 app.use(logger)
 app.use(cookieParser())
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(upload.array())
