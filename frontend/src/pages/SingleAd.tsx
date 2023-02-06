@@ -75,7 +75,7 @@ const SingleAd = () => {
                 <img
                   className="h-[34rem] w-full object-cover object-center"
                   src={item}
-                  key={crypto.randomUUID()}
+                  key={item}
                   alt={item}
                 />
               </div>

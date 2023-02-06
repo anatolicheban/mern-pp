@@ -1,0 +1,5 @@
+{
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.defaultWebAppToDeploy": "/subscriptions/a853cf18-b8af-4e0c-bde6-d35f0d83dbc2/AppServices/subscriptions/a853cf18-b8af-4e0c-bde6-d35f0d83dbc2/resourceGroups/olx-app/providers/Microsoft.Web/sites/Olx-main",
+  "appService.deploySubpath": "backend"
+}

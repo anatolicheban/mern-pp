@@ -6,6 +6,7 @@ import { RootState } from "../store";
 const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = fetchBaseQuery({
   baseUrl: "http://83.229.85.165",
   credentials: "include",
+  referrerPolicy: "unsafe-url",
   prepareHeaders: (headers, api) => {
     const state = api.getState() as RootState;
     const token = state.auth.token;
@@ -27,7 +28,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   // console.log(extraOptions) //custom like {shout: true}
 
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
 
   // If you want, handle other status codes, too
   if (result?.error?.status === 403) {
