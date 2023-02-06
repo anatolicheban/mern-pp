@@ -4,9 +4,8 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolk
 import { RootState } from "../store";
 
 const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = fetchBaseQuery({
-  baseUrl: "http://83.229.85.165",
+  baseUrl: "https://olx-app.onrender.com/",
   credentials: "include",
-  referrerPolicy: "unsafe-url",
   prepareHeaders: (headers, api) => {
     const state = api.getState() as RootState;
     const token = state.auth.token;
